@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { withTransaction } from '../db/connection';
+import { withTransaction, getPool } from '../db/connection';
 import { UserRepository } from '../db/repositories/user';
 import { AccessAllowlistRepository } from '../db/repositories/allowlist';
 
@@ -91,7 +91,9 @@ export async function registerGoogleAuth(fastify: FastifyInstance) {
       }
 
       // Check allowlist
-      const allowlistRepo = new AccessAllowlistRepository(fastify.pg);
+      const pool = getPool();
+      const client = await pool.connect();
+      const allowlistRepo = new AccessAllowlistRepository(client);
       const allowlistEntry = await allowlistRepo.findByEmail(googleUser.email);
       
       if (!allowlistEntry || allowlistEntry.status !== 'approved') {
@@ -99,7 +101,7 @@ export async function registerGoogleAuth(fastify: FastifyInstance) {
       }
 
       // Create or update user
-      const userRepo = new UserRepository(fastify.pg);
+      const userRepo = new UserRepository(client);
       let user = await userRepo.findByEmail(googleUser.email);
 
       if (!user) {
@@ -125,6 +127,10 @@ export async function registerGoogleAuth(fastify: FastifyInstance) {
     } catch (error) {
       console.error('OAuth callback error:', error);
       return reply.redirect('/login?error=auth_failed');
+    } finally {
+      if (client) {
+        client.release();
+      }
     }
   });
 
