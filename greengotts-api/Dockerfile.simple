@@ -1,0 +1,25 @@
+# Simple Dockerfile for faster builds
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies (faster)
+RUN npm install --no-audit --no-fund --silent
+
+# Copy source code
+COPY . .
+
+# Build
+RUN npm run build
+
+# Create uploads directory
+RUN mkdir -p /tmp/uploads
+
+# Expose port
+EXPOSE 8080
+
+# Start
+CMD ["npm", "start"]

@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm install
+# Install dependencies with cache optimization
+RUN npm install --no-audit --no-fund
 
 # Copy source code
 COPY . .
@@ -16,7 +16,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Remove dev dependencies
+# Remove dev dependencies to reduce image size
 RUN npm prune --production
 
 # Create uploads directory

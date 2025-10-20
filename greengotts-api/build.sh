@@ -1,10 +1,18 @@
 #!/bin/bash
-set -e
 
-echo "Installing dependencies..."
-npm ci
+# Fast build script for Railway
+echo "🚀 Starting fast build..."
 
-echo "Building application..."
+# Install dependencies
+echo "📦 Installing dependencies..."
+npm install --no-audit --no-fund --silent
+
+# Build the application
+echo "🔨 Building application..."
 npm run build
 
-echo "Build completed successfully!"
+# Create uploads directory
+echo "📁 Creating uploads directory..."
+mkdir -p /tmp/uploads
+
+echo "✅ Build complete!"
