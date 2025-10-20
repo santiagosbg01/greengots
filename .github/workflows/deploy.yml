@@ -1,0 +1,64 @@
+name: Deploy Greengotts
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: greengotts-api/package-lock.json
+    
+    - name: Install API dependencies
+      run: |
+        cd greengotts-api
+        npm ci
+    
+    - name: Build API
+      run: |
+        cd greengotts-api
+        npm run build
+    
+    - name: Deploy API to Railway
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "Deploy API to Railway (configure Railway project)"
+        # Add Railway deployment commands here
+
+  deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: greengotts-app/package-lock.json
+    
+    - name: Install App dependencies
+      run: |
+        cd greengotts-app
+        npm ci
+    
+    - name: Build App
+      run: |
+        cd greengotts-app
+        npm run build
+    
+    - name: Deploy App to Vercel
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "Deploy App to Vercel (configure Vercel project)"
+        # Add Vercel deployment commands here
