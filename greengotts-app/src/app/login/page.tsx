@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { apiClient } from '@/lib/api';
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,9 +29,20 @@ export default function LoginPage() {
     }
   }, [error]);
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setIsLoading(true);
-    window.location.href = '/api/auth/google/login';
+    try {
+      const response = await apiClient.getAuthUrl();
+      if (response.data?.url) {
+        window.location.href = response.data.url;
+      } else {
+        toast.error('Failed to get authentication URL');
+        setIsLoading(false);
+      }
+    } catch (error) {
+      toast.error('Authentication failed. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   return (
