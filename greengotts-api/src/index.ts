@@ -3,7 +3,7 @@ import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
 import multipart from '@fastify/multipart';
 import { getPool, closePool } from './db/connection';
-import { registerGoogleAuth } from './auth/google';
+import { registerPasswordAuth } from './auth/password';
 import { registerAdminRoutes } from './admin/allowlist';
 import { registerTeamRoutes } from './teams/index';
 
@@ -36,7 +36,7 @@ async function build() {
   });
 
   // Register routes
-  await fastify.register(registerGoogleAuth);
+  await fastify.register(registerPasswordAuth);
   await fastify.register(registerAdminRoutes);
   await fastify.register(registerTeamRoutes);
 
