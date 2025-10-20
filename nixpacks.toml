@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_18", "npm"]
+
+[phases.install]
+cmds = ["echo 'This is a monorepo. Please deploy individual services.'"]
+
+[phases.build]
+cmds = ["echo 'Please deploy greengotts-api or greengotts-app individually.'"]
+
+[start]
+cmd = "echo 'Please deploy individual services from greengotts-api or greengotts-app folders'"

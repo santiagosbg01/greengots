@@ -107,15 +107,30 @@ The database uses the `gg_` prefix for all tables:
 
 ## 🚀 Deployment
 
-### API Deployment (Railway)
-1. Connect your GitHub repository to Railway
-2. Set environment variables in Railway dashboard
-3. Deploy automatically on push to main
+### Railway Deployment (Recommended)
+This is a **monorepo** with two services. Deploy them individually on Railway:
 
-### Frontend Deployment (Vercel)
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy automatically on push to main
+#### 1. Deploy Backend API
+1. Go to [Railway](https://railway.app)
+2. Create new project from GitHub
+3. Select this repository
+4. Set **Root Directory** to `greengotts-api`
+5. Add environment variables
+6. Deploy!
+
+#### 2. Deploy Frontend App
+1. Add new service to Railway project
+2. Select this repository
+3. Set **Root Directory** to `greengotts-app`
+4. Add environment variables
+5. Deploy!
+
+#### 3. Add Database
+1. Add PostgreSQL service to Railway project
+2. Copy connection string
+3. Update environment variables
+
+**📋 See [RAILWAY_SETUP.md](RAILWAY_SETUP.md) for detailed instructions**
 
 ### Environment Variables
 
